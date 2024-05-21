@@ -1,0 +1,1 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/8bjpjw1a79u7q6cn?svg=true)](https://ci.appveyor.com/project/marinaolivekey/aqaewbselenide)
