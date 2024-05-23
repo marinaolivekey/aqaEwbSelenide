@@ -18,7 +18,32 @@ public class TestCardDelivery {
         return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
     }
 
+
     @Test
+    public void shouldTestHappyPath() {
+        // java -jar app-card-delivery.jar
+        open("http://localhost:9999");
+        $("[data-test-id='city'] input").setValue("Пе");
+        $$(".menu-item__control").findBy(Condition.text("Пермь")).click();
+        String planningDate = generateDate(7,"dd.MM.yyyy");
+        // $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id='date'] input").click();
+        if (!generateDate(3,"MM").equals(generateDate(7,"MM"))){
+            $(".calendar__arrow_direction_right").click();
+        }
+        $$("[data-day]").findBy(Condition.text(generateDate(7,"d"))).click();
+        $("[data-test-id='name'] input").setValue("Перов-Водкин Коля");
+        $("[data-test-id='phone'] input").setValue("+79001112233");
+        $("[data-test-id='agreement']").click();
+        $("button.button").click();
+        $(".notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.exactText("Встреча успешно забронирована на "+ planningDate));
+    }
+}
+
+/*
+@Test
     public void shouldTestHappyPath() {
         // java -jar app-card-delivery.jar
         open("http://localhost:9999");
@@ -33,15 +58,4 @@ public class TestCardDelivery {
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(15))
                 .shouldHave(Condition.exactText("Встреча успешно забронирована на "+ planningDate));
-
-
-//        open("http://localhost:9999");
-//        SelenideElement form = $("form");
-//        form.$("[data-test-id=name] input").setValue("Василий");
-//        form.$("[data-test-id=phone] input").setValue("+79270000000");
-//        form.$("[data-test-id=agreement]").click();
-//        form.$("[data-test-id=submit]").click();
-//        $(".alert-success").shouldHave(exactText("Ваша заявка успешно отправлена!"));
-
-    }
-}
+ */
